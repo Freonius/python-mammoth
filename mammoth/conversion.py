@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from functools import partial
+from contextlib import suppress
 
 import cobble
 
@@ -355,6 +356,9 @@ class _DocumentConverter(documents.element_visitor(args=1)):
 
 
 def _document_matcher_matches(matcher, element, element_type):
+    with suppress(Exception):
+        if element_type == "small_caps" and matcher.style_name.value == "small_caps":
+            return True
     if matcher.element_type in ["underline", "strikethrough", "all_caps", "small_caps", "bold", "italic", "comment_reference"]:
         return matcher.element_type == element_type
     elif matcher.element_type == "break":
